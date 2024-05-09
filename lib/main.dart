@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:login/common/constant/colors.dart';
+import 'package:login/features/auth/views/login_screen.dart';
 
 void main() {
   runApp(const LoginApp());
@@ -18,9 +19,7 @@ class LoginApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity
       ),
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Container(),
-      ),
+      home: const LoginScreen(),
     );
   }
 }

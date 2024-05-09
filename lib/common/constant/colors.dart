@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 const primaryColor = Color(0xff22a45d);
 
 /// Font Color
-const bodyText = Color(0xff868686);
+const bodyTextColor = Color(0xff868686);
 
 /// TextField Background Color
 const inputBgColor = Color(0xfffbfbfb);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:login/common/constant/colors.dart';
-import 'package:login/features/auth/views/login_screen.dart';
+import 'package:login/features/auth/view/login_screen.dart';
 
 void main() {
   runApp(const LoginApp());
@@ -14,6 +14,7 @@ class LoginApp extends StatelessWidget {
     return MaterialApp(
       title: 'Login App',
       theme: ThemeData(
+        fontFamily: 'NotoSans',
         primaryColor: primaryColor,
         useMaterial3: true,
         visualDensity: VisualDensity.adaptivePlatformDensity

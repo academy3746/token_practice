@@ -46,6 +46,7 @@ class CommonTextField extends StatelessWidget {
         fillColor: inputBgColor,
         filled: true,
         border: baseBorder,
+        enabledBorder: baseBorder,
         focusedBorder: baseBorder.copyWith(
           borderSide: baseBorder.borderSide.copyWith(
             color: primaryColor,

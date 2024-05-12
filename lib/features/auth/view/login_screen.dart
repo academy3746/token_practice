@@ -14,6 +14,7 @@ class LoginScreen extends StatelessWidget {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       scrollDirection: Axis.vertical,
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: SafeArea(
         top: true,
         bottom: false,
@@ -73,7 +74,6 @@ class LoginScreen extends StatelessWidget {
       children: [
         CommonTextField(
           hintText: '이메일을 입력해 주세요',
-          autofocus: true,
           onChanged: (value) {},
         ),
         Gaps.v8,

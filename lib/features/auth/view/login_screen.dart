@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:login/common/constant/colors.dart';
 import 'package:login/common/constant/gaps.dart';
@@ -87,12 +91,38 @@ class LoginScreen extends StatelessWidget {
   }
 
   Widget _accessField() {
+    final dio = Dio();
+
+    const androidIp = '10.0.2.2:3000';
+
+    const iosIp = '127.0.0.1:3000';
+
+    final ip = Platform.isAndroid ? androidIp : iosIp;
+
     return Column(
       children: [
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () async {
+              /// ID:Password
+              const rawString = 'test@codefactory.ai:testtest';
+
+              Codec<String, String> stringToBase64 = utf8.fuse(base64);
+
+              String token = stringToBase64.encode(rawString);
+
+              final res = await dio.post(
+                'http://$ip/auth/login',
+                options: Options(
+                  headers: {
+                    'Authorization': 'Basic $token',
+                  },
+                ),
+              );
+
+              print(res.data);
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: primaryColor,
             ),
@@ -107,7 +137,20 @@ class LoginScreen extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           child: TextButton(
-            onPressed: () {},
+            onPressed: () async {
+              const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RAY29kZWZhY3RvcnkuYWkiLCJzdWIiOiJmNTViMzJkMi00ZDY4LTRjMWUtYTNjYS1kYTlkN2QwZDkyZTUiLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTcxNTUyMTcyOCwiZXhwIjoxNzE1NjA4MTI4fQ.5cWC1z_XdHZ_-AFEwIBXJPGkxAlzO5-Yx38PyKOHCVI';
+
+              final res = await dio.post(
+                'http://$ip/auth/token',
+                options: Options(
+                  headers: {
+                    'Authorization': 'Bearer $token',
+                  },
+                ),
+              );
+
+              print(res.data);
+            },
             child: const Text(
               '회원가입',
               style: TextStyle(

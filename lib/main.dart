@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:login/common/constant/colors.dart';
-import 'package:login/features/auth/view/login_screen.dart';
+
+import 'features/auth/views/login_screen.dart';
 
 void main() {
   runApp(const LoginApp());

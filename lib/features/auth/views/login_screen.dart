@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:login/common/constant/colors.dart';
@@ -106,12 +105,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _accessField() {
     final dio = Dio();
-
-    const androidIp = '10.0.2.2:3000';
-
-    const iosIp = '127.0.0.1:3000';
-
-    final ip = Platform.isAndroid ? androidIp : iosIp;
 
     return Column(
       children: [

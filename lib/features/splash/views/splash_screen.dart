@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:login/common/constant/colors.dart';
 import 'package:login/common/constant/data.dart';
@@ -24,15 +25,22 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _checkTokens() async {
+    final dio = Dio();
+
     final refreshToken = await storage.read(key: refreshTokenKey);
 
-    final accessToken = await storage.read(key: accessTokenKey);
+    //final accessToken = await storage.read(key: accessTokenKey);
 
-    if (refreshToken == null || accessToken == null) {
-      Future.delayed(const Duration(seconds: 2), () {
-        Navigator.pushReplacementNamed(context, LoginScreen.routeName);
-      });
-    } else {
+    try {
+      await dio.post(
+        'http://$ip/auth/token',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $refreshToken',
+          },
+        ),
+      );
+
       Future.delayed(const Duration(seconds: 2), () {
         Navigator.pushReplacement(
           context,
@@ -40,6 +48,10 @@ class _SplashScreenState extends State<SplashScreen> {
             builder: (context) => const RootTab(),
           ),
         );
+      });
+    } catch (e) {
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.pushReplacementNamed(context, LoginScreen.routeName);
       });
     }
   }

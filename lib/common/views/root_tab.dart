@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:login/common/constant/colors.dart';
 import 'package:login/common/constant/sizes.dart';
 import 'package:login/common/layout/default.dart';
+import 'package:login/features/stores/views/store_screen.dart';
 
 class RootTab extends StatefulWidget {
   const RootTab({super.key});
@@ -43,7 +44,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return DefaultScaffold(
-      title: 'Yamette!',
+      title: '뉴비딜리버리',
       centerTitle: true,
       bottomNavigationBar: _buildBottomWidget(),
       child: _buildTapBarView(),
@@ -55,7 +56,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
       controller: controller,
       physics: const NeverScrollableScrollPhysics(),
       children: const [
-        Center(child: Text('HOME')),
+        StoreScreen(),
         Center(child: Text('FOOD')),
         Center(child: Text('ORDER')),
         Center(child: Text('PROFILE')),

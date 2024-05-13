@@ -10,8 +10,35 @@ class RootTab extends StatefulWidget {
   State<RootTab> createState() => _RootTabState();
 }
 
-class _RootTabState extends State<RootTab> {
+class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
   int currentIndex = 0;
+
+  late TabController controller;
+
+  void tabListener() {
+    setState(() {
+      currentIndex = controller.index;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = TabController(
+      length: 4,
+      vsync: this,
+    );
+
+    controller.addListener(tabListener);
+  }
+
+  @override
+  void dispose() {
+    controller.removeListener(tabListener);
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +46,20 @@ class _RootTabState extends State<RootTab> {
       title: 'Yamette!',
       centerTitle: true,
       bottomNavigationBar: _buildBottomWidget(),
-      child: const Center(
-        child: Text('Root Tab'),
-      ),
+      child: _buildTapBarView(),
+    );
+  }
+
+  Widget _buildTapBarView() {
+    return TabBarView(
+      controller: controller,
+      physics: const NeverScrollableScrollPhysics(),
+      children: const [
+        Center(child: Text('HOME')),
+        Center(child: Text('FOOD')),
+        Center(child: Text('ORDER')),
+        Center(child: Text('PROFILE')),
+      ],
     );
   }
 
@@ -34,11 +72,7 @@ class _RootTabState extends State<RootTab> {
       unselectedFontSize: Sizes.size10,
       type: BottomNavigationBarType.fixed,
       currentIndex: currentIndex,
-      onTap: (index) {
-        setState(() {
-          currentIndex = index;
-        });
-      },
+      onTap: (index) => controller.animateTo(index),
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home_outlined),

@@ -1,3 +1,5 @@
+import 'package:login/common/constant/data.dart';
+
 enum StorePriceRange {
   expensive,
   medium,
@@ -53,9 +55,11 @@ class StoreModel {
     return StoreModel(
       id: map['id'] as String,
       name: map['name'] as String,
-      thumbUrl: map['thumbUrl'] as String,
-      tags: map['tags'] as List<String>,
-      priceRange: map['priceRange'] as StorePriceRange,
+      thumbUrl: 'http://$ip${map['thumbUrl']}',
+      tags: List<String>.from(map['tags']),
+      priceRange: StorePriceRange.values.firstWhere(
+        (data) => data.name == map['priceRange'],
+      ),
       ratings: map['ratings'] as double,
       ratingsCount: map['ratingsCount'] as int,
       deliveryTime: map['deliveryTime'] as int,

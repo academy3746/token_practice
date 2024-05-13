@@ -57,19 +57,7 @@ class StoreScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               var item = listModel[index];
 
-              var model = StoreModel(
-                id: item['id'],
-                name: item['name'],
-                thumbUrl: 'http://$ip${item['thumbUrl']}',
-                tags: List<String>.from(item['tags']),
-                priceRange: StorePriceRange.values.firstWhere(
-                  (data) => data.name == item['priceRange'],
-                ),
-                ratings: item['ratings'],
-                ratingsCount: item['ratingsCount'],
-                deliveryTime: item['deliveryTime'],
-                deliveryFee: item['deliveryFee'],
-              );
+              var model = StoreModel.fromMap(item);
 
               return StoreCard(
                 image: Image.network(

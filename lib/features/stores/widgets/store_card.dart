@@ -9,10 +9,10 @@ class StoreCard extends StatelessWidget {
     required this.image,
     required this.name,
     required this.tags,
-    required this.reviewCount,
+    required this.ratingsCount,
     required this.deliveryTime,
-    required this.deliveryCost,
-    required this.rating,
+    required this.deliveryFee,
+    required this.ratings,
   });
 
   /// 스토어 이미지
@@ -25,16 +25,16 @@ class StoreCard extends StatelessWidget {
   final List<String> tags;
 
   /// 리뷰 개수
-  final int reviewCount;
+  final int ratingsCount;
 
   /// 배송 시간
   final int deliveryTime;
 
   /// 배송비
-  final int deliveryCost;
+  final int deliveryFee;
 
   /// 평점
-  final double rating;
+  final double ratings;
 
   @override
   Widget build(BuildContext context) {
@@ -80,14 +80,14 @@ class StoreCard extends StatelessWidget {
             /// 평점
             _iconText(
               icon: Icons.star,
-              label: rating.toString(),
+              label: ratings.toString(),
             ),
             _dotSeparator(),
 
             /// 리뷰 개수
             _iconText(
               icon: Icons.receipt,
-              label: reviewCount.toString(),
+              label: ratingsCount.toString(),
             ),
             _dotSeparator(),
 
@@ -101,7 +101,7 @@ class StoreCard extends StatelessWidget {
             /// 배송비
             _iconText(
               icon: Icons.monetization_on,
-              label: deliveryCost == 0 ? '무료' : deliveryCost.toString(),
+              label: deliveryFee == 0 ? '무료' : deliveryFee.toString(),
             ),
           ],
         ),

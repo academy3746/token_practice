@@ -29,10 +29,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
     final refreshToken = await storage.read(key: refreshTokenKey);
 
-    //final accessToken = await storage.read(key: accessTokenKey);
+    await storage.read(key: accessTokenKey);
 
     try {
-      await dio.post(
+      final res = await dio.post(
         'http://$ip/auth/token',
         options: Options(
           headers: {
@@ -41,17 +41,23 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       );
 
+      await storage.write(
+        key: accessTokenKey,
+        value: res.data['accessToken'],
+      );
+
       Future.delayed(const Duration(seconds: 2), () {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (context) => const RootTab(),
-          ),
+          MaterialPageRoute(builder: (context) => const RootTab()),
         );
       });
     } catch (e) {
       Future.delayed(const Duration(seconds: 2), () {
-        Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+        Navigator.pushReplacementNamed(
+          context,
+          LoginScreen.routeName,
+        );
       });
     }
   }

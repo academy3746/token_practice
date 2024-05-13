@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:login/common/constant/colors.dart';
+import 'package:login/common/constant/data.dart';
 import 'package:login/common/constant/gaps.dart';
 import 'package:login/common/constant/sizes.dart';
 import 'package:login/common/layout/default.dart';
@@ -12,7 +13,7 @@ import 'package:login/common/widgets/common_text_field.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
-  static const String routeName = '/';
+  static const String routeName = '/login';
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -134,14 +135,26 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               );
 
+              final refreshTokenValue = res.data['refreshToken'];
+
+              final accessTokenValue = res.data['accessToken'];
+
+              await storage.write(
+                key: refreshTokenKey,
+                value: refreshTokenValue,
+              );
+
+              await storage.write(
+                key: accessTokenKey,
+                value: accessTokenValue,
+              );
+
               if (!mounted) return;
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => const RootTab(),
                 ),
               );
-
-              print(res.data);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: primaryColor,

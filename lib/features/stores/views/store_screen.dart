@@ -59,18 +59,7 @@ class StoreScreen extends StatelessWidget {
 
               var model = StoreModel.fromMap(item);
 
-              return StoreCard(
-                image: Image.network(
-                  model.thumbUrl,
-                  fit: BoxFit.cover,
-                ),
-                name: model.name,
-                tags: model.tags,
-                ratingsCount: model.ratingsCount,
-                deliveryTime: model.deliveryTime,
-                deliveryFee: model.deliveryFee,
-                ratings: model.ratings,
-              );
+              return StoreCard.fromModel(model);
             },
             separatorBuilder: (context, index) => Gaps.v16,
             itemCount: listModel.length,

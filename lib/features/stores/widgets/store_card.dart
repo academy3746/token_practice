@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:login/common/constant/colors.dart';
 import 'package:login/common/constant/gaps.dart';
 import 'package:login/common/constant/sizes.dart';
+import 'package:login/features/stores/models/store_model.dart';
 
 class StoreCard extends StatelessWidget {
   const StoreCard({
@@ -146,6 +147,21 @@ class StoreCard extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
       ),
+    );
+  }
+
+  factory StoreCard.fromModel(StoreModel model) {
+    return StoreCard(
+      image: Image.network(
+        model.thumbUrl,
+        fit: BoxFit.cover,
+      ),
+      name: model.name,
+      tags: model.tags,
+      ratingsCount: model.ratingsCount,
+      deliveryTime: model.deliveryTime,
+      deliveryFee: model.deliveryFee,
+      ratings: model.ratings,
     );
   }
 }

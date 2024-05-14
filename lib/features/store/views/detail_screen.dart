@@ -4,6 +4,7 @@ import 'package:login/common/constant/data.dart';
 import 'package:login/common/constant/sizes.dart';
 import 'package:login/common/layout/default.dart';
 import 'package:login/features/product/models/detail_model.dart';
+import 'package:login/features/product/models/product_model.dart';
 import 'package:login/features/product/widgets/product_card.dart';
 import 'package:login/features/store/widgets/store_card.dart';
 
@@ -65,7 +66,7 @@ class StoreDetailScreen extends StatelessWidget {
               slivers: [
                 _buildTop(model),
                 _buildLabel(),
-                _buildProduct(),
+                _buildProduct(model.products),
               ],
             ),
           );
@@ -102,20 +103,24 @@ class StoreDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProduct() {
+  Widget _buildProduct(List<StoreProductModel> products) {
     return SliverPadding(
       padding: const EdgeInsets.symmetric(
         horizontal: Sizes.size20,
       ),
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
-          (context, index) => Container(
+          (context, index) {
+            var model = products[index];
+
+            return Container(
             margin: const EdgeInsets.only(
               top: Sizes.size16,
             ),
-            child: const ProductCard(),
-          ),
-          childCount: 10,
+            child: ProductCard.fromModel(model),
+          );
+          },
+          childCount: products.length,
         ),
       ),
     );

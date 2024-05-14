@@ -33,13 +33,7 @@ class StoreDetailModel extends StoreModel {
     return StoreDetailModel(
       detail: map['detail'] as String,
       products: map['products'].map<StoreProductModel>(
-        (data) => StoreProductModel(
-          id: data['id'],
-          name: data['name'],
-          detail: data['detail'],
-          imgUrl: data['imgUrl'],
-          price: data['price'],
-        ),
+        (data) => StoreProductModel.fromMap(data),
       ).toList(),
       id: map['id'] as String,
       name: map['name'] as String,

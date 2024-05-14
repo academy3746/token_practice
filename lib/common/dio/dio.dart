@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:login/common/constant/data.dart';
 
+/// Customized Interceptor
 class CarrierHasArrived extends Interceptor {
   final FlutterSecureStorage storage;
 
@@ -13,6 +14,10 @@ class CarrierHasArrived extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
+    print(
+      '[REQ] [${options.method}] [${options.uri}]',
+    );
+
     if (options.headers['accessToken'] == 'true') {
       /// Implicit Headers 삭제
       options.headers.remove('accessToken');
@@ -29,7 +34,9 @@ class CarrierHasArrived extends Interceptor {
       /// Implicit Headers 삭제
       options.headers.remove('refreshToken');
 
-      final token = await storage.read(key: refreshTokenKey);
+      final token = await storage.read(
+        key: refreshTokenKey,
+      );
 
       /// 유효한 토큰 값으로 대체
       options.headers.addAll({
@@ -43,6 +50,10 @@ class CarrierHasArrived extends Interceptor {
   /// 2) RESPONSE
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
+    print(
+      '[RES] [${response.requestOptions.method}] [${response.requestOptions.uri}]',
+    );
+
     return super.onResponse(response, handler);
   }
 
@@ -52,6 +63,10 @@ class CarrierHasArrived extends Interceptor {
     DioException err,
     ErrorInterceptorHandler handler,
   ) async {
+    print(
+      '[ERR] [${err.requestOptions.method}] [${err.requestOptions.uri}]',
+    );
+
     /// [401] accessToken Expiration
     /// 1. 토큰 재발급 요청 [auth → token]
     /// 2. 새로운 토큰 재요청 [refreshToken → accessToken]
@@ -103,7 +118,7 @@ class CarrierHasArrived extends Interceptor {
         /// New Request
         final response = await dio.fetch(options);
 
-        /// [200] Exit Process without Error
+        /// [200] Exit Process without Error on Client Screen
         return handler.resolve(response);
       } on DioException catch (e) {
         /// 1. Could not refresh token

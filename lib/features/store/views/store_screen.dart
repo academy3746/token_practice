@@ -61,10 +61,14 @@ class StoreScreen extends StatelessWidget {
               var model = StoreModel.fromMap(item);
 
               return GestureDetector(
-                onTap: () => Navigator.pushNamed(
-                    context,
-                    StoreDetailScreen.routeName,
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return StoreDetailScreen(rid: model.id);
+                    },
                   ),
+                ),
                 child: StoreCard.fromModel(model: model),
               );
             },

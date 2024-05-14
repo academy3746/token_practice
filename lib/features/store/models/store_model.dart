@@ -66,28 +66,4 @@ class StoreModel {
       deliveryFee: map['deliveryFee'] as int,
     );
   }
-
-  StoreModel copyWith({
-    String? id,
-    String? name,
-    String? thumbUrl,
-    List<String>? tags,
-    StorePriceRange? priceRange,
-    double? ratings,
-    int? ratingsCount,
-    int? deliveryTime,
-    int? deliveryFee,
-  }) {
-    return StoreModel(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      thumbUrl: thumbUrl ?? this.thumbUrl,
-      tags: tags ?? this.tags,
-      priceRange: priceRange ?? this.priceRange,
-      ratings: ratings ?? this.ratings,
-      ratingsCount: ratingsCount ?? this.ratingsCount,
-      deliveryTime: deliveryTime ?? this.deliveryTime,
-      deliveryFee: deliveryFee ?? this.deliveryFee,
-    );
-  }
 }

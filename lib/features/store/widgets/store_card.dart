@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:login/common/constant/colors.dart';
 import 'package:login/common/constant/gaps.dart';
 import 'package:login/common/constant/sizes.dart';
+import 'package:login/features/product/models/detail_model.dart';
 import 'package:login/features/store/models/store_model.dart';
 
 class StoreCard extends StatelessWidget {
@@ -178,7 +179,6 @@ class StoreCard extends StatelessWidget {
   factory StoreCard.fromModel({
     required StoreModel model,
     bool isDetail = false,
-    String? detail,
   }) {
     return StoreCard(
       image: Image.network(
@@ -192,7 +192,7 @@ class StoreCard extends StatelessWidget {
       deliveryFee: model.deliveryFee,
       ratings: model.ratings,
       isDetail: isDetail,
-      detail: detail,
+      detail: model is StoreDetailModel ? model.detail : null,
     );
   }
 }

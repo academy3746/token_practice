@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:login/common/constant/data.dart';
 import 'package:login/common/constant/sizes.dart';
+import 'package:login/common/dio/dio.dart';
 import 'package:login/common/layout/default.dart';
 import 'package:login/features/product/models/detail_model.dart';
 import 'package:login/features/product/models/product_model.dart';
@@ -12,20 +13,26 @@ import 'package:login/features/store/widgets/store_card.dart';
 class StoreDetailScreen extends StatelessWidget {
   const StoreDetailScreen({
     super.key,
-    required this.rid,
+    required this.id,
   });
 
-  final String rid;
+  final String id;
 
   Future<StoreDetailModel> _getStoreDetail() async {
     final dio = Dio();
+
+    dio.interceptors.add(
+      CarrierHasArrived(
+        storage: storage,
+      ),
+    );
 
     final repo = StoreRepository(
       dio,
       baseUrl: 'http://$ip/restaurant',
     );
 
-    return repo.getStoreDetail(id: rid);
+    return repo.getStoreDetail(id: id);
   }
 
   @override

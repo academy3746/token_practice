@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' hide Headers;
 import 'package:login/features/product/models/detail_model.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
@@ -13,6 +13,9 @@ abstract class StoreRepository {
   paginate();*/
 
   @GET('/{id}')
+  @Headers({
+    'accessToken': 'true'
+  })
   Future<StoreDetailModel> getStoreDetail({
     @Path() required String id,
   });

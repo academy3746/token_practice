@@ -65,7 +65,7 @@ class StoreScreen extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return StoreDetailScreen(rid: model.id);
+                      return StoreDetailScreen(id: model.id);
                     },
                   ),
                 ),

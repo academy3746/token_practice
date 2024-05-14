@@ -4,6 +4,7 @@ import 'package:login/common/constant/data.dart';
 import 'package:login/common/constant/gaps.dart';
 import 'package:login/common/constant/sizes.dart';
 import 'package:login/features/stores/models/store_model.dart';
+import 'package:login/features/stores/views/detail_screen.dart';
 import 'package:login/features/stores/widgets/store_card.dart';
 
 class StoreScreen extends StatelessWidget {
@@ -59,7 +60,13 @@ class StoreScreen extends StatelessWidget {
 
               var model = StoreModel.fromMap(item);
 
-              return StoreCard.fromModel(model);
+              return GestureDetector(
+                onTap: () => Navigator.pushNamed(
+                    context,
+                    StoreDetailScreen.routeName,
+                  ),
+                child: StoreCard.fromModel(model: model),
+              );
             },
             separatorBuilder: (context, index) => Gaps.v16,
             itemCount: listModel.length,

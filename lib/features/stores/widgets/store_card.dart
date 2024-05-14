@@ -14,6 +14,8 @@ class StoreCard extends StatelessWidget {
     required this.deliveryTime,
     required this.deliveryFee,
     required this.ratings,
+    this.isDetail = false,
+    this.detail,
   });
 
   /// 스토어 이미지
@@ -37,16 +39,25 @@ class StoreCard extends StatelessWidget {
   /// 평점
   final double ratings;
 
+  /// 페이지 상세 여부
+  final bool isDetail;
+
+  /// 상세 내용
+  final String? detail;
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         /// 스토어 이미지
-        ClipRRect(
-          borderRadius: BorderRadius.circular(Sizes.size12),
-          child: image,
-        ),
+        if (isDetail) image,
+
+        if (!isDetail)
+          ClipRRect(
+            borderRadius: BorderRadius.circular(Sizes.size12),
+            child: image,
+          ),
         Gaps.v16,
 
         /// 스토어 정보
@@ -57,56 +68,70 @@ class StoreCard extends StatelessWidget {
 
   /// 스토어 정보
   Widget _storeInfo() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          name,
-          style: const TextStyle(
-            fontSize: Sizes.size20,
-            fontWeight: FontWeight.w500,
+    return Container(
+      margin: EdgeInsets.symmetric(
+        horizontal: isDetail ? Sizes.size20 : 0,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            name,
+            style: const TextStyle(
+              fontSize: Sizes.size20,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-        ),
-        Gaps.v8,
-        Text(
-          tags.join(' · '),
-          style: const TextStyle(
-            color: bodyTextColor,
-            fontSize: Sizes.size14,
+          Gaps.v8,
+          Text(
+            tags.join(' · '),
+            style: const TextStyle(
+              color: bodyTextColor,
+              fontSize: Sizes.size14,
+            ),
           ),
-        ),
-        Gaps.v8,
-        Row(
-          children: [
-            /// 평점
-            _iconText(
-              icon: Icons.star,
-              label: ratings.toString(),
-            ),
-            _dotSeparator(),
+          Gaps.v8,
+          Row(
+            children: [
+              /// 평점
+              _iconText(
+                icon: Icons.star,
+                label: ratings.toString(),
+              ),
+              _dotSeparator(),
 
-            /// 리뷰 개수
-            _iconText(
-              icon: Icons.receipt,
-              label: ratingsCount.toString(),
-            ),
-            _dotSeparator(),
+              /// 리뷰 개수
+              _iconText(
+                icon: Icons.receipt,
+                label: ratingsCount.toString(),
+              ),
+              _dotSeparator(),
 
-            /// 배송 시간
-            _iconText(
-              icon: Icons.timelapse_outlined,
-              label: '$deliveryTime 분',
-            ),
-            _dotSeparator(),
+              /// 배송 시간
+              _iconText(
+                icon: Icons.timelapse_outlined,
+                label: '$deliveryTime 분',
+              ),
+              _dotSeparator(),
 
-            /// 배송비
-            _iconText(
-              icon: Icons.monetization_on,
-              label: deliveryFee == 0 ? '무료' : deliveryFee.toString(),
+              /// 배송비
+              _iconText(
+                icon: Icons.monetization_on,
+                label: deliveryFee == 0 ? '무료' : deliveryFee.toString(),
+              ),
+            ],
+          ),
+
+          /// 상세 내용
+          if (detail != null && isDetail)
+            Container(
+              margin: const EdgeInsets.only(
+                top: Sizes.size16,
+              ),
+              child: Text(detail!),
             ),
-          ],
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -150,7 +175,11 @@ class StoreCard extends StatelessWidget {
     );
   }
 
-  factory StoreCard.fromModel(StoreModel model) {
+  factory StoreCard.fromModel({
+    required StoreModel model,
+    bool isDetail = false,
+    String? detail,
+  }) {
     return StoreCard(
       image: Image.network(
         model.thumbUrl,
@@ -162,6 +191,8 @@ class StoreCard extends StatelessWidget {
       deliveryTime: model.deliveryTime,
       deliveryFee: model.deliveryFee,
       ratings: model.ratings,
+      isDetail: isDetail,
+      detail: detail,
     );
   }
 }

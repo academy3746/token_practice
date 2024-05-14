@@ -40,7 +40,56 @@ class CarrierHasArrived extends Interceptor {
 
   /// 3) ERROR
   @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
-    return super.onError(err, handler);
+  Future<void> onError(
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
+    print('[ERR] [${err.requestOptions.method}] [${err.requestOptions.uri}]');
+
+    final refreshToken = await storage.read(key: refreshTokenKey);
+
+    if (refreshToken == null) {
+      return handler.reject(err);
+    }
+
+    final isStatus401 = err.response?.statusCode == 401;
+
+    final isPathRefresh = err.requestOptions.path == '/auth/token';
+
+    if (isStatus401 && !isPathRefresh) {
+      final dio = Dio();
+
+      try {
+        final res = await dio.post(
+          'http://$ip/auth/token',
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $refreshToken',
+            },
+          ),
+        );
+
+        final accessToken = res.data['accessToken'];
+
+        final options = err.requestOptions;
+
+        options.headers.addAll({
+          'Authorization': 'Bearer $accessToken',
+        });
+
+        await storage.write(
+          key: accessTokenKey,
+          value: accessToken,
+        );
+
+        final response = await dio.fetch(options);
+
+        return handler.resolve(response);
+      } on DioException catch (e) {
+        return handler.reject(e);
+      }
+    }
+
+    return handler.reject(err);
   }
 }

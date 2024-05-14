@@ -29,11 +29,11 @@ class StoreDetailModel extends StoreModel {
     };
   }
 
-  factory StoreDetailModel.fromMap(Map<String, dynamic> map) {
+  factory StoreDetailModel.fromJson(Map<String, dynamic> map) {
     return StoreDetailModel(
       detail: map['detail'] as String,
       products: map['products'].map<StoreProductModel>(
-        (data) => StoreProductModel.fromMap(data),
+        (data) => StoreProductModel.fromJson(data),
       ).toList(),
       id: map['id'] as String,
       name: map['name'] as String,

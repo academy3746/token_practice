@@ -58,7 +58,7 @@ class StoreScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               var item = listModel[index];
 
-              var model = StoreModel.fromMap(item);
+              var model = StoreModel.fromJson(item);
 
               return GestureDetector(
                 onTap: () => Navigator.push(

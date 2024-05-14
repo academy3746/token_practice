@@ -6,6 +6,7 @@ import 'package:login/common/layout/default.dart';
 import 'package:login/features/product/models/detail_model.dart';
 import 'package:login/features/product/models/product_model.dart';
 import 'package:login/features/product/widgets/product_card.dart';
+import 'package:login/features/store/repositories/store_repo.dart';
 import 'package:login/features/store/widgets/store_card.dart';
 
 class StoreDetailScreen extends StatelessWidget {
@@ -16,19 +17,15 @@ class StoreDetailScreen extends StatelessWidget {
 
   final String rid;
 
-  Future<Map<String, dynamic>> _getStoreDetail() async {
+  Future<StoreDetailModel> _getStoreDetail() async {
     final dio = Dio();
 
-    final accessToken = await storage.read(key: accessTokenKey);
-
-    final res = await dio.get(
-      'http://$ip/restaurant/$rid',
-      options: Options(headers: {
-        'Authorization': 'Bearer $accessToken',
-      }),
+    final repo = StoreRepository(
+      dio,
+      baseUrl: 'http://$ip/restaurant',
     );
 
-    return res.data;
+    return repo.getStoreDetail(id: rid);
   }
 
   @override
@@ -39,7 +36,7 @@ class StoreDetailScreen extends StatelessWidget {
       child: FutureBuilder(
         future: _getStoreDetail(),
         builder: (context, snapshot) {
-          final listModel = snapshot.data;
+          final model = snapshot.data;
 
           if (snapshot.hasError) {
             return Center(
@@ -56,15 +53,13 @@ class StoreDetailScreen extends StatelessWidget {
             );
           }
 
-          final model = StoreDetailModel.fromMap(listModel!);
-
           return Container(
             margin: const EdgeInsets.symmetric(
               vertical: Sizes.size16,
             ),
             child: CustomScrollView(
               slivers: [
-                _buildTop(model),
+                _buildTop(model!),
                 _buildLabel(),
                 _buildProduct(model.products),
               ],
@@ -114,11 +109,11 @@ class StoreDetailScreen extends StatelessWidget {
             var model = products[index];
 
             return Container(
-            margin: const EdgeInsets.only(
-              top: Sizes.size16,
-            ),
-            child: ProductCard.fromModel(model),
-          );
+              margin: const EdgeInsets.only(
+                top: Sizes.size16,
+              ),
+              child: ProductCard.fromModel(model),
+            );
           },
           childCount: products.length,
         ),

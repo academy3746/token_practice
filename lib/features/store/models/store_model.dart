@@ -51,7 +51,7 @@ class StoreModel {
     };
   }
 
-  factory StoreModel.fromMap(Map<String, dynamic> map) {
+  factory StoreModel.fromJson(Map<String, dynamic> map) {
     return StoreModel(
       id: map['id'] as String,
       name: map['name'] as String,

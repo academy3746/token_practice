@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:login/common/constant/colors.dart';
 import 'package:login/features/splash/views/splash_screen.dart';
-import 'package:login/features/stores/views/detail_screen.dart';
+import 'package:login/features/store/views/detail_screen.dart';
 
 import 'features/auth/views/login_screen.dart';
 

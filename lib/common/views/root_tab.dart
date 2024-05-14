@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:login/common/constant/colors.dart';
 import 'package:login/common/constant/sizes.dart';
 import 'package:login/common/layout/default.dart';
-import 'package:login/features/stores/views/store_screen.dart';
+import 'package:login/features/store/views/store_screen.dart';
 
 class RootTab extends StatefulWidget {
   const RootTab({super.key});

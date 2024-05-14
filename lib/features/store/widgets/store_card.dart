@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:login/common/constant/colors.dart';
 import 'package:login/common/constant/gaps.dart';
 import 'package:login/common/constant/sizes.dart';
-import 'package:login/features/stores/models/store_model.dart';
+import 'package:login/features/store/models/store_model.dart';
 
 class StoreCard extends StatelessWidget {
   const StoreCard({

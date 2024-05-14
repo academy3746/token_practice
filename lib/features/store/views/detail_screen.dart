@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:login/common/constant/gaps.dart';
 import 'package:login/common/constant/sizes.dart';
 import 'package:login/common/layout/default.dart';
-import 'package:login/features/stores/widgets/store_card.dart';
+import 'package:login/features/product/widgets/product_card.dart';
+import 'package:login/features/store/widgets/store_card.dart';
 
 class StoreDetailScreen extends StatefulWidget {
   const StoreDetailScreen({super.key});
@@ -16,7 +18,8 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultScaffold(
-      title: '불타는 떡볶이',
+      title: '피자타임',
+      centerTitle: true,
       child: Container(
         margin: const EdgeInsets.symmetric(
           vertical: Sizes.size16,
@@ -34,6 +37,13 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
               ratings: 4.5,
               isDetail: true,
               detail: '할라피뇨 불고기 피자 존맛탱...',
+            ),
+            Gaps.v24,
+            Container(
+              margin: const EdgeInsets.symmetric(
+                horizontal: Sizes.size20,
+              ),
+              child: const ProductCard(),
             ),
           ],
         ),

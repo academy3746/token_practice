@@ -1,7 +1,11 @@
-import 'package:login/common/constant/data.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:login/common/utils/data_utils.dart';
 import 'package:login/features/product/models/product_model.dart';
 import 'package:login/features/store/models/store_model.dart';
 
+part 'detail_model.g.dart';
+
+@JsonSerializable()
 class StoreDetailModel extends StoreModel {
   final String detail;
 
@@ -21,31 +25,5 @@ class StoreDetailModel extends StoreModel {
     required this.products,
   });
 
-  @override
-  Map<String, dynamic> toMap() {
-    return {
-      'detail': detail,
-      'products': products,
-    };
-  }
-
-  factory StoreDetailModel.fromJson(Map<String, dynamic> map) {
-    return StoreDetailModel(
-      detail: map['detail'] as String,
-      products: map['products'].map<StoreProductModel>(
-        (data) => StoreProductModel.fromJson(data),
-      ).toList(),
-      id: map['id'] as String,
-      name: map['name'] as String,
-      thumbUrl: 'http://$ip${map['thumbUrl']}',
-      tags: List<String>.from(map['tags']),
-      priceRange: StorePriceRange.values.firstWhere(
-        (data) => data.name == map['priceRange'],
-      ),
-      ratings: map['ratings'] as double,
-      ratingsCount: map['ratingsCount'] as int,
-      deliveryTime: map['deliveryTime'] as int,
-      deliveryFee: map['deliveryFee'] as int,
-    );
-  }
+  factory StoreDetailModel.fromJson(Map<String, dynamic> json) => _$StoreDetailModelFromJson(json);
 }

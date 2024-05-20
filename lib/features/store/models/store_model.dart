@@ -1,4 +1,7 @@
-import 'package:login/common/constant/data.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:login/common/utils/data_utils.dart';
+
+part 'store_model.g.dart';
 
 enum StorePriceRange {
   expensive,
@@ -6,11 +9,15 @@ enum StorePriceRange {
   cheap,
 }
 
+@JsonSerializable()
 class StoreModel {
   final String id;
 
   final String name;
 
+  @JsonKey(
+    fromJson: DataUtils.pathToUrl,
+  )
   final String thumbUrl;
 
   final List<String> tags;
@@ -37,33 +44,6 @@ class StoreModel {
     required this.deliveryFee,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'thumbUrl': thumbUrl,
-      'tags': tags,
-      'priceRange': priceRange,
-      'ratings': ratings,
-      'ratingsCount': ratingsCount,
-      'deliveryTime': deliveryTime,
-      'deliveryFee': deliveryFee,
-    };
-  }
-
-  factory StoreModel.fromJson(Map<String, dynamic> map) {
-    return StoreModel(
-      id: map['id'] as String,
-      name: map['name'] as String,
-      thumbUrl: 'http://$ip${map['thumbUrl']}',
-      tags: List<String>.from(map['tags']),
-      priceRange: StorePriceRange.values.firstWhere(
-        (data) => data.name == map['priceRange'],
-      ),
-      ratings: map['ratings'] as double,
-      ratingsCount: map['ratingsCount'] as int,
-      deliveryTime: map['deliveryTime'] as int,
-      deliveryFee: map['deliveryFee'] as int,
-    );
-  }
+  factory StoreModel.fromJson(Map<String, dynamic> json) =>
+      _$StoreModelFromJson(json);
 }

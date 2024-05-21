@@ -5,31 +5,26 @@ import 'package:login/common/constant/gaps.dart';
 import 'package:login/common/constant/sizes.dart';
 import 'package:login/common/dio/dio.dart';
 import 'package:login/features/store/models/store_model.dart';
+import 'package:login/features/store/repositories/store_repo.dart';
 import 'package:login/features/store/views/detail_screen.dart';
 import 'package:login/features/store/widgets/store_card.dart';
 
 class StoreScreen extends StatelessWidget {
   const StoreScreen({super.key});
 
-  Future<List> _paginatedStore() async {
+  Future<List<StoreModel>> _paginatedStore() async {
     final dio = Dio();
 
     dio.interceptors.add(
       CommonInterceptor(storage: storage),
     );
 
-    final accessToken = await storage.read(key: accessTokenKey);
+    final res = await StoreRepository(
+      dio,
+      baseUrl: 'http://$ip/restaurant',
+    ).paginate();
 
-    final res = await dio.get(
-      'http://$ip/restaurant',
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $accessToken',
-        },
-      ),
-    );
-
-    return res.data['data'];
+    return res.data;
   }
 
   @override
@@ -61,9 +56,7 @@ class StoreScreen extends StatelessWidget {
 
           return ListView.separated(
             itemBuilder: (context, index) {
-              var item = listModel[index];
-
-              var model = StoreModel.fromJson(item);
+              var model = listModel[index];
 
               return GestureDetector(
                 onTap: () => Navigator.push(

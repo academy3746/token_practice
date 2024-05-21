@@ -3,10 +3,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:login/common/constant/data.dart';
 
 /// Customized Interceptor
-class CarrierHasArrived extends Interceptor {
+class CommonInterceptor extends Interceptor {
   final FlutterSecureStorage storage;
 
-  CarrierHasArrived({required this.storage});
+  CommonInterceptor({required this.storage});
 
   /// 1) REQUEST
   @override

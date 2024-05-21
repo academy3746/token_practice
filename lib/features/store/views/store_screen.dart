@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:login/common/constant/data.dart';
 import 'package:login/common/constant/gaps.dart';
 import 'package:login/common/constant/sizes.dart';
+import 'package:login/common/dio/dio.dart';
 import 'package:login/features/store/models/store_model.dart';
 import 'package:login/features/store/views/detail_screen.dart';
 import 'package:login/features/store/widgets/store_card.dart';
@@ -12,6 +13,10 @@ class StoreScreen extends StatelessWidget {
 
   Future<List> _paginatedStore() async {
     final dio = Dio();
+
+    dio.interceptors.add(
+      CommonInterceptor(storage: storage),
+    );
 
     final accessToken = await storage.read(key: accessTokenKey);
 

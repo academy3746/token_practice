@@ -22,9 +22,7 @@ class StoreDetailScreen extends StatelessWidget {
     final dio = Dio();
 
     dio.interceptors.add(
-      CarrierHasArrived(
-        storage: storage,
-      ),
+      CommonInterceptor(storage: storage),
     );
 
     final repo = StoreRepository(

@@ -19,6 +19,37 @@ class _StoreRepository implements StoreRepository {
   String? baseUrl;
 
   @override
+  Future<CursorPaginationModel<StoreModel>> paginate() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<CursorPaginationModel<StoreModel>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = CursorPaginationModel<StoreModel>.fromJson(
+      _result.data!,
+      (json) => StoreModel.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
   Future<StoreDetailModel> getStoreDetail({required String id}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};

@@ -1,8 +1,8 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:login/common/constant/data.dart';
 import 'package:login/common/constant/sizes.dart';
-import 'package:login/common/dio/dio.dart';
+import 'package:login/common/dio/repositories/dio_repo.dart';
 import 'package:login/common/layout/default.dart';
 import 'package:login/features/product/models/detail_model.dart';
 import 'package:login/features/product/models/product_model.dart';
@@ -10,7 +10,7 @@ import 'package:login/features/product/widgets/product_card.dart';
 import 'package:login/features/store/repositories/store_repo.dart';
 import 'package:login/features/store/widgets/store_card.dart';
 
-class StoreDetailScreen extends StatelessWidget {
+class StoreDetailScreen extends ConsumerWidget {
   const StoreDetailScreen({
     super.key,
     required this.id,
@@ -18,12 +18,8 @@ class StoreDetailScreen extends StatelessWidget {
 
   final String id;
 
-  Future<StoreDetailModel> _getStoreDetail() async {
-    final dio = Dio();
-
-    dio.interceptors.add(
-      CommonInterceptor(storage: storage),
-    );
+  Future<StoreDetailModel> _getStoreDetail(WidgetRef ref) async {
+    final dio = ref.watch(dioProvider);
 
     final repo = StoreRepository(
       dio,
@@ -34,12 +30,12 @@ class StoreDetailScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return DefaultScaffold(
       title: '피자타임',
       centerTitle: true,
       child: FutureBuilder(
-        future: _getStoreDetail(),
+        future: _getStoreDetail(ref),
         builder: (context, snapshot) {
           final model = snapshot.data;
 

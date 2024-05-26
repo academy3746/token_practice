@@ -1,24 +1,27 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:login/common/constant/colors.dart';
 import 'package:login/common/constant/data.dart';
 import 'package:login/common/constant/gaps.dart';
 import 'package:login/common/constant/sizes.dart';
+import 'package:login/common/dio/repositories/dio_repo.dart';
+import 'package:login/common/dio/repositories/secure_repo.dart';
 import 'package:login/common/layout/default.dart';
 import 'package:login/common/views/root_tab.dart';
 import 'package:login/common/widgets/common_text_field.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   static const String routeName = '/login';
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   String userName = '';
 
   String password = '';
@@ -104,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _accessField() {
-    final dio = Dio();
+    final dio = ref.watch(dioProvider);
 
     return Column(
       children: [
@@ -131,6 +134,8 @@ class _LoginScreenState extends State<LoginScreen> {
               final refreshTokenValue = res.data['refreshToken'];
 
               final accessTokenValue = res.data['accessToken'];
+
+              final storage = ref.read(secureStorageProvider);
 
               await storage.write(
                 key: refreshTokenKey,

@@ -1,23 +1,19 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:login/common/constant/data.dart';
 import 'package:login/common/constant/gaps.dart';
 import 'package:login/common/constant/sizes.dart';
-import 'package:login/common/dio/dio.dart';
+import 'package:login/common/dio/repositories/dio_repo.dart';
 import 'package:login/features/store/models/store_model.dart';
 import 'package:login/features/store/repositories/store_repo.dart';
 import 'package:login/features/store/views/detail_screen.dart';
 import 'package:login/features/store/widgets/store_card.dart';
 
-class StoreScreen extends StatelessWidget {
+class StoreScreen extends ConsumerWidget {
   const StoreScreen({super.key});
 
-  Future<List<StoreModel>> _paginatedStore() async {
-    final dio = Dio();
-
-    dio.interceptors.add(
-      CommonInterceptor(storage: storage),
-    );
+  Future<List<StoreModel>> _paginatedStore(WidgetRef ref) async {
+    final dio = ref.watch(dioProvider);
 
     final res = await StoreRepository(
       dio,
@@ -28,14 +24,14 @@ class StoreScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       margin: const EdgeInsets.symmetric(
         vertical: Sizes.size24,
         horizontal: Sizes.size20,
       ),
       child: FutureBuilder(
-        future: _paginatedStore(),
+        future: _paginatedStore(ref),
         builder: (context, snapshot) {
           final listModel = snapshot.data ?? [];
 

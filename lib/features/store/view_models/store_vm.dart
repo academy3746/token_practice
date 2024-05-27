@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:login/common/model/cursor_pagination_model.dart';
 import 'package:login/features/store/models/store_model.dart';
 import 'package:login/features/store/repositories/store_repo.dart';
 
@@ -12,7 +13,7 @@ final storeProvider = StateNotifierProvider<StoreViewModel, List<StoreModel>>(
   },
 );
 
-class StoreViewModel extends StateNotifier<List<StoreModel>> {
+class StoreViewModel extends StateNotifier<CursorPaginationModel> {
   final StoreRepository repo;
 
   StoreViewModel({required this.repo}) : super([]) {

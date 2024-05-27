@@ -1,0 +1,27 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:login/features/store/models/store_model.dart';
+import 'package:login/features/store/repositories/store_repo.dart';
+
+final storeProvider = StateNotifierProvider<StoreViewModel, List<StoreModel>>(
+  (ref) {
+    final repo = ref.watch(storeRepositoryProvider);
+
+    final notifier = StoreViewModel(repo: repo);
+
+    return notifier;
+  },
+);
+
+class StoreViewModel extends StateNotifier<List<StoreModel>> {
+  final StoreRepository repo;
+
+  StoreViewModel({required this.repo}) : super([]) {
+    paginate();
+  }
+
+  Future<void> paginate() async {
+    final res = await repo.paginate();
+
+    state = res.data;
+  }
+}

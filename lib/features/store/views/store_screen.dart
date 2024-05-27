@@ -1,27 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:login/common/constant/data.dart';
 import 'package:login/common/constant/gaps.dart';
 import 'package:login/common/constant/sizes.dart';
-import 'package:login/common/dio/repositories/dio_repo.dart';
-import 'package:login/features/store/models/store_model.dart';
 import 'package:login/features/store/repositories/store_repo.dart';
 import 'package:login/features/store/views/detail_screen.dart';
 import 'package:login/features/store/widgets/store_card.dart';
 
 class StoreScreen extends ConsumerWidget {
   const StoreScreen({super.key});
-
-  Future<List<StoreModel>> _paginatedStore(WidgetRef ref) async {
-    final dio = ref.watch(dioProvider);
-
-    final res = await StoreRepository(
-      dio,
-      baseUrl: 'http://$ip/restaurant',
-    ).paginate();
-
-    return res.data;
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,9 +17,9 @@ class StoreScreen extends ConsumerWidget {
         horizontal: Sizes.size20,
       ),
       child: FutureBuilder(
-        future: _paginatedStore(ref),
+        future: ref.watch(storeRepositoryProvider).paginate(),
         builder: (context, snapshot) {
-          final listModel = snapshot.data ?? [];
+          final listModel = snapshot.data?.data ?? [];
 
           if (snapshot.hasError) {
             return Center(

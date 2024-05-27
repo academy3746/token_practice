@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:login/common/constant/data.dart';
 import 'package:login/common/constant/sizes.dart';
-import 'package:login/common/dio/repositories/dio_repo.dart';
 import 'package:login/common/layout/default.dart';
 import 'package:login/features/product/models/detail_model.dart';
 import 'package:login/features/product/models/product_model.dart';
@@ -18,24 +16,13 @@ class StoreDetailScreen extends ConsumerWidget {
 
   final String id;
 
-  Future<StoreDetailModel> _getStoreDetail(WidgetRef ref) async {
-    final dio = ref.watch(dioProvider);
-
-    final repo = StoreRepository(
-      dio,
-      baseUrl: 'http://$ip/restaurant',
-    );
-
-    return repo.getStoreDetail(id: id);
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DefaultScaffold(
       title: '피자타임',
       centerTitle: true,
       child: FutureBuilder(
-        future: _getStoreDetail(ref),
+        future: ref.watch(storeRepositoryProvider).getStoreDetail(id: id),
         builder: (context, snapshot) {
           final model = snapshot.data;
 

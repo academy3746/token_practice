@@ -44,8 +44,8 @@ class CursorPaginationMeta {
   final bool? hasMore;
 
   CursorPaginationMeta({
-    required this.count,
-    required this.hasMore,
+    this.count,
+    this.hasMore,
   });
 
   factory CursorPaginationMeta.fromJson(Map<String, dynamic> json) =>

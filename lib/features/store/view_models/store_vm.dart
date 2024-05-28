@@ -32,10 +32,22 @@ class StoreViewModel extends StateNotifier<CursorPaginationBase> {
     /// 강제 새로고침
     bool forcedReload = false,
   }) async {
-    // TODO: 1. CursorPagination OnState
-    // TODO: 2. CursorPagination IsLoading
-    // TODO: 3. CursorPagination Error
-    // TODO: 4. CursorPagination Reload
-    // TODO: 5. CursorPagination More
+    /// TODO: 1. CursorPagination OnState
+    /// TODO: 2. CursorPagination IsLoading
+    /// TODO: 3. CursorPagination Error
+    /// TODO: 4. CursorPagination Reload
+    /// TODO: 5. CursorPagination More
+
+    /// TODO: 즉시 반환
+    /// TODO: fetchMore == true (IsLoading)
+    /// TODO: 1) !fetchMore → Try to Refresh
+    if (state is CursorPaginationModel && !forcedReload) {
+      final pState = state as CursorPaginationModel;
+
+      /// No Data
+      if (!pState.meta.hasMore!) {
+        return;
+      }
+    }
   }
 }

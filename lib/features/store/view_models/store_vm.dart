@@ -2,7 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:login/common/model/cursor_pagination_model.dart';
 import 'package:login/features/store/repositories/store_repo.dart';
 
-final storeProvider = StateNotifierProvider<StoreViewModel, CursorPaginationBase>(
+final storeProvider =
+    StateNotifierProvider<StoreViewModel, CursorPaginationBase>(
   (ref) {
     final repo = ref.watch(storeRepositoryProvider);
 
@@ -21,9 +22,20 @@ class StoreViewModel extends StateNotifier<CursorPaginationBase> {
     paginate();
   }
 
-  Future<void> paginate() async {
-    final res = await repo.paginate();
+  Future<void> paginate({
+    /// 20개씩 Fetch
+    int fetchCount = 20,
 
-    state = res;
+    /// 더 불러오기
+    bool fetchMore = false,
+
+    /// 강제 새로고침
+    bool forcedReload = false,
+  }) async {
+    // TODO: 1. CursorPagination OnState
+    // TODO: 2. CursorPagination IsLoading
+    // TODO: 3. CursorPagination Error
+    // TODO: 4. CursorPagination Reload
+    // TODO: 5. CursorPagination More
   }
 }

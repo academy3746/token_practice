@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:login/common/constant/gaps.dart';
 import 'package:login/common/constant/sizes.dart';
+import 'package:login/common/model/cursor_pagination_model.dart';
 import 'package:login/features/store/view_models/store_vm.dart';
 import 'package:login/features/store/views/detail_screen.dart';
 import 'package:login/features/store/widgets/store_card.dart';
@@ -13,11 +14,24 @@ class StoreScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cont = ref.watch(storeProvider);
 
-    if (cont.isEmpty) {
+    if (cont is CursorPaginationError) {
+      return Center(
+        child: Text(
+          cont.message,
+          style: const TextStyle(
+            fontSize: Sizes.size14,
+          ),
+        ),
+      );
+    }
+
+    if (cont is CursorPaginationIsLoading) {
       return const Center(
         child: CircularProgressIndicator.adaptive(),
       );
     }
+
+    final list = cont as CursorPaginationModel;
 
     return Container(
       margin: const EdgeInsets.symmetric(
@@ -26,7 +40,7 @@ class StoreScreen extends ConsumerWidget {
       ),
       child: ListView.separated(
         itemBuilder: (context, index) {
-          final model = cont[index];
+          final model = list.data[index];
 
           return GestureDetector(
             onTap: () => Navigator.push(
@@ -41,7 +55,7 @@ class StoreScreen extends ConsumerWidget {
           );
         },
         separatorBuilder: (context, index) => Gaps.v16,
-        itemCount: cont.length,
+        itemCount: list.data.length,
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:login/common/constant/data.dart';
 import 'package:login/common/dio/repositories/dio_repo.dart';
 import 'package:login/common/model/cursor_pagination_model.dart';
+import 'package:login/common/model/pagination_params.dart';
 import 'package:login/features/product/models/detail_model.dart';
 import 'package:login/features/store/models/store_model.dart';
 import 'package:retrofit/http.dart';
@@ -29,7 +30,9 @@ abstract class StoreRepository {
 
   @GET('/')
   @Headers({'accessToken': 'true'})
-  Future<CursorPaginationModel<StoreModel>> paginate();
+  Future<CursorPaginationModel<StoreModel>> paginate({
+    @Queries() PaginationParameters? params = const PaginationParameters(),
+  });
 
   @GET('/{id}')
   @Headers({'accessToken': 'true'})

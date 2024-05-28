@@ -19,9 +19,12 @@ class _StoreRepository implements StoreRepository {
   String? baseUrl;
 
   @override
-  Future<CursorPaginationModel<StoreModel>> paginate() async {
+  Future<CursorPaginationModel<StoreModel>> paginate(
+      {PaginationParameters? params = const PaginationParameters()}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(params?.toJson() ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;

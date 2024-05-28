@@ -39,9 +39,9 @@ class CursorPaginationModel<T> extends CursorPaginationBase {
 
 @JsonSerializable()
 class CursorPaginationMeta {
-  final int count;
+  final int? count;
 
-  final bool hasMore;
+  final bool? hasMore;
 
   CursorPaginationMeta({
     required this.count,
@@ -53,7 +53,7 @@ class CursorPaginationMeta {
 }
 
 /// 페이지 새로고침
-class CursorPaginationReload extends CursorPaginationModel {
+class CursorPaginationReload<T> extends CursorPaginationModel<T> {
   CursorPaginationReload({
     required super.meta,
     required super.data,
@@ -61,7 +61,7 @@ class CursorPaginationReload extends CursorPaginationModel {
 }
 
 /// 데이터 더 불러오기
-class CursorPaginationMore extends CursorPaginationModel {
+class CursorPaginationMore<T> extends CursorPaginationModel<T> {
   CursorPaginationMore({
     required super.meta,
     required super.data,

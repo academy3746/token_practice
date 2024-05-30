@@ -33,59 +33,74 @@ class StoreViewModel extends StateNotifier<CursorPaginationBase> {
     /// 강제 새로고침
     bool forcedReload = false,
   }) async {
-    /// TODO: 3. CursorPagination Error
-    /// TODO: 4. CursorPagination Reload
+    try {
+      if (state is CursorPaginationModel && !forcedReload) {
+        final pState = state as CursorPaginationModel;
 
-    if (state is CursorPaginationModel && !forcedReload) {
-      final pState = state as CursorPaginationModel;
+        /// OnState
+        if (!pState.meta.hasMore!) {
+          return;
+        }
+      }
 
-      /// 1. CursorPagination OnState
-      if (!pState.meta.hasMore!) {
+      final isLoading = state is CursorPaginationIsLoading;
+      final isReload = state is CursorPaginationReload;
+      final isMore = state is CursorPaginationMore;
+
+      /// IsLoading
+      if (isMore && (isLoading || isReload || isMore)) {
         return;
       }
-    }
 
-    final isLoading = state is CursorPaginationIsLoading;
-    final isReload = state is CursorPaginationReload;
-    final isMore = state is CursorPaginationMore;
-
-    /// 2. CursorPagination IsLoading
-    if (isMore && (isLoading || isReload || isMore)) {
-      return;
-    }
-
-    var params = PaginationParameters(
-      count: fetchCount,
-    );
-
-    /// 3. CursorPagination More
-    if (fetchMore) {
-      final pState = state as CursorPaginationModel;
-
-      state = CursorPaginationMore(
-        meta: pState.meta,
-        data: pState.data,
+      var params = PaginationParameters(
+        count: fetchCount,
       );
 
-      params = params.copyWith(
-        after: pState.data.last.id,
+      /// More
+      if (fetchMore) {
+        final pState = state as CursorPaginationModel;
+
+        state = CursorPaginationMore(
+          meta: pState.meta,
+          data: pState.data,
+        );
+
+        params = params.copyWith(
+          after: pState.data.last.id,
+        );
+      } else {
+        /// Request Fetch API from start
+        if (state is CursorPaginationModel && !forcedReload) {
+          final pState = state as CursorPaginationModel;
+
+          state = CursorPaginationMore(
+            meta: pState.meta,
+            data: pState.data,
+          );
+        } else {
+          state = CursorPaginationIsLoading();
+        }
+      }
+
+      final res = await repo.paginate(
+        params: params,
       );
-    }
 
-    final res = await repo.paginate(
-      params: params,
-    );
+      if (state is CursorPaginationMore) {
+        final pState = state as CursorPaginationMore;
 
-    if (state is CursorPaginationMore) {
-      final pState = state as CursorPaginationMore;
-
-      /// Accumulate Data
-      state = res.copyWith(
-        data: [
-          ...pState.data,
-          ...res.data,
-        ],
-      );
+        /// Accumulate
+        state = res.copyWith(
+          data: [
+            ...pState.data,
+            ...res.data,
+          ],
+        );
+      } else {
+        state = res;
+      }
+    } catch (err) {
+      state = CursorPaginationError(message: '데이터 조회에 실패했습니다');
     }
   }
 }

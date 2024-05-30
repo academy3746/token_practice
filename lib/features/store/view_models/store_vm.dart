@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:login/common/model/cursor_pagination_model.dart';
+import 'package:login/common/model/pagination_params.dart';
 import 'package:login/features/store/repositories/store_repo.dart';
 
 final storeProvider =
@@ -32,22 +33,59 @@ class StoreViewModel extends StateNotifier<CursorPaginationBase> {
     /// 강제 새로고침
     bool forcedReload = false,
   }) async {
-    /// TODO: 1. CursorPagination OnState
-    /// TODO: 2. CursorPagination IsLoading
     /// TODO: 3. CursorPagination Error
     /// TODO: 4. CursorPagination Reload
-    /// TODO: 5. CursorPagination More
 
-    /// TODO: 즉시 반환
-    /// TODO: fetchMore == true (IsLoading)
-    /// TODO: 1) !fetchMore → Try to Refresh
     if (state is CursorPaginationModel && !forcedReload) {
       final pState = state as CursorPaginationModel;
 
-      /// No Data
+      /// 1. CursorPagination OnState
       if (!pState.meta.hasMore!) {
         return;
       }
+    }
+
+    final isLoading = state is CursorPaginationIsLoading;
+    final isReload = state is CursorPaginationReload;
+    final isMore = state is CursorPaginationMore;
+
+    /// 2. CursorPagination IsLoading
+    if (isMore && (isLoading || isReload || isMore)) {
+      return;
+    }
+
+    var params = PaginationParameters(
+      count: fetchCount,
+    );
+
+    /// 3. CursorPagination More
+    if (fetchMore) {
+      final pState = state as CursorPaginationModel;
+
+      state = CursorPaginationMore(
+        meta: pState.meta,
+        data: pState.data,
+      );
+
+      params = params.copyWith(
+        after: pState.data.last.id,
+      );
+    }
+
+    final res = await repo.paginate(
+      params: params,
+    );
+
+    if (state is CursorPaginationMore) {
+      final pState = state as CursorPaginationMore;
+
+      /// Accumulate Data
+      state = res.copyWith(
+        data: [
+          ...pState.data,
+          ...res.data,
+        ],
+      );
     }
   }
 }

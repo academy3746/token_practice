@@ -35,6 +35,16 @@ class CursorPaginationModel<T> extends CursorPaginationBase {
       fromJsonT,
     );
   }
+
+  CursorPaginationModel copyWith({
+    CursorPaginationMeta? meta,
+    List<T>? data,
+  }) {
+    return CursorPaginationModel(
+      meta: meta ?? this.meta,
+      data: data ?? this.data,
+    );
+  }
 }
 
 @JsonSerializable()
@@ -50,6 +60,16 @@ class CursorPaginationMeta {
 
   factory CursorPaginationMeta.fromJson(Map<String, dynamic> json) =>
       _$CursorPaginationMetaFromJson(json);
+
+  CursorPaginationMeta copyWith({
+    int? count,
+    bool? hasMore,
+  }) {
+    return CursorPaginationMeta(
+      count: count ?? this.count,
+      hasMore: hasMore ?? this.hasMore,
+    );
+  }
 }
 
 /// 페이지 새로고침

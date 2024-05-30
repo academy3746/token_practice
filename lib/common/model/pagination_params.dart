@@ -12,8 +12,20 @@ class PaginationParameters {
     this.after,
     this.count,
   });
-  
-  factory PaginationParameters.fromJson(Map<String, dynamic> json) => _$PaginationParametersFromJson(json);
+
+  factory PaginationParameters.fromJson(Map<String, dynamic> json) {
+    return _$PaginationParametersFromJson(json);
+  }
 
   Map<String, dynamic> toJson() => _$PaginationParametersToJson(this);
+
+  PaginationParameters copyWith({
+    String? after,
+    int? count,
+  }) {
+    return PaginationParameters(
+      after: after ?? this.after,
+      count: count ?? this.count,
+    );
+  }
 }

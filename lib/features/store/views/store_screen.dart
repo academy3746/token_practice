@@ -27,8 +27,8 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
   void _pagination() {
     if (scrollCont.offset > scrollCont.position.maxScrollExtent - 300) {
       ref.read(storeProvider.notifier).paginate(
-        fetchMore: true,
-      );
+            fetchMore: true,
+          );
     }
   }
 
@@ -63,6 +63,20 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
       child: ListView.separated(
         controller: scrollCont,
         itemBuilder: (context, index) {
+          if (index == list.data.length) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical: 16.0,
+              ),
+              child: Center(
+                child: state is CursorPaginationMore
+                    ? const CircularProgressIndicator.adaptive()
+                    : const Text('더 이상 조회할 자료가 없어요'),
+              ),
+            );
+          }
+
           final model = list.data[index];
 
           return GestureDetector(
@@ -78,7 +92,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
           );
         },
         separatorBuilder: (context, index) => Gaps.v16,
-        itemCount: list.data.length,
+        itemCount: list.data.length + 1,
       ),
     );
   }

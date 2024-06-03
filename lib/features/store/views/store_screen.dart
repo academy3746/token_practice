@@ -7,17 +7,45 @@ import 'package:login/features/store/view_models/store_vm.dart';
 import 'package:login/features/store/views/detail_screen.dart';
 import 'package:login/features/store/widgets/store_card.dart';
 
-class StoreScreen extends ConsumerWidget {
+class StoreScreen extends ConsumerStatefulWidget {
   const StoreScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final cont = ref.watch(storeProvider);
+  ConsumerState<StoreScreen> createState() => _StoreScreenState();
+}
 
-    if (cont is CursorPaginationError) {
+class _StoreScreenState extends ConsumerState<StoreScreen> {
+  final scrollCont = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    scrollCont.addListener(_pagination);
+  }
+
+  void _pagination() {
+    if (scrollCont.offset > scrollCont.position.maxScrollExtent - 300) {
+      ref.read(storeProvider.notifier).paginate(
+        fetchMore: true,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(storeProvider);
+
+    if (state is CursorPaginationIsLoading) {
+      return const Center(
+        child: CircularProgressIndicator.adaptive(),
+      );
+    }
+
+    if (state is CursorPaginationError) {
       return Center(
         child: Text(
-          cont.message,
+          state.message,
           style: const TextStyle(
             fontSize: Sizes.size14,
           ),
@@ -25,13 +53,7 @@ class StoreScreen extends ConsumerWidget {
       );
     }
 
-    if (cont is CursorPaginationIsLoading) {
-      return const Center(
-        child: CircularProgressIndicator.adaptive(),
-      );
-    }
-
-    final list = cont as CursorPaginationModel;
+    final list = state as CursorPaginationModel;
 
     return Container(
       margin: const EdgeInsets.symmetric(
@@ -39,6 +61,7 @@ class StoreScreen extends ConsumerWidget {
         horizontal: Sizes.size20,
       ),
       child: ListView.separated(
+        controller: scrollCont,
         itemBuilder: (context, index) {
           final model = list.data[index];
 

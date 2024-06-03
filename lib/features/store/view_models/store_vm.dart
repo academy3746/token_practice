@@ -44,7 +44,9 @@ class StoreViewModel extends StateNotifier<CursorPaginationBase> {
       }
 
       final isLoading = state is CursorPaginationIsLoading;
+
       final isReload = state is CursorPaginationReload;
+
       final isMore = state is CursorPaginationMore;
 
       /// IsLoading
